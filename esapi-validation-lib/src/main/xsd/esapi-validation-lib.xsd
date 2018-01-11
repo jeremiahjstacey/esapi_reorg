@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE xml>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema"
+	xmlns:esapi="http://org.owasp.esapi" targetNamespace="http://org.owasp.esapi">
+
+	<xs:element name="esapi">
+
+		<!-- Root of xml definition -->
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element name="ValidationProvider">
+					<xs:complexType>
+						<xs:sequence minOccurs="1" maxOccurs="1">
+							<xs:element name="class" type="xs:string" />
+						</xs:sequence>
+					</xs:complexType>
+				</xs:element>
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+</xs:schema>

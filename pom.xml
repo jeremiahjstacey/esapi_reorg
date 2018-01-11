@@ -1,0 +1,83 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<groupId>org.owasp.esapi</groupId>
+	<artifactId>esapi-root</artifactId>
+	<version>0.0.1-SNAPSHOT</version>
+	<packaging>pom</packaging>
+	<name>ESAPI Root</name>
+	<description>Enterprise Security API Root Project</description>
+
+	<modules>
+		<module>esapi-codec-api</module>
+		<module>esapi-codec-lib</module>
+		<module>esapi-validation-api</module>
+		<module>esapi-validation-lib</module>
+	</modules>
+
+	<build>
+		<plugins>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-compiler-plugin</artifactId>
+				<version>3.1</version>
+				<configuration>
+					<source>1.8</source>
+					<target>1.8</target>
+				</configuration>
+			</plugin>
+		</plugins>
+	</build>
+
+	<dependencyManagement>
+		<dependencies>
+			<!-- ********* -->
+			<!-- REFERENCE -->
+			<!-- ********* -->
+			<dependency>
+				<groupId>javax.servlet</groupId>
+				<artifactId>javax.servlet-api</artifactId>
+				<version>3.0.1</version>
+				<scope>provided</scope>
+			</dependency>
+			<dependency>
+				<groupId>org.owasp.esapi</groupId>
+				<artifactId>esapi</artifactId>
+				<version>2.1.0.1</version>
+			</dependency>
+
+			<!-- ******** -->
+			<!-- PROVIDED -->
+			<!-- ******** -->
+
+
+			<!-- ******* -->
+			<!-- COMPILE -->
+			<!-- ******* -->
+
+
+
+			<!-- **** -->
+			<!-- TEST -->
+			<!-- **** -->
+			<dependency>
+				<groupId>junit</groupId>
+				<artifactId>junit</artifactId>
+				<version>4.12</version>
+				<scope>test</scope>
+			</dependency>
+			<dependency>
+				<groupId>org.powermock</groupId>
+				<artifactId>powermock-module-junit4</artifactId>
+				<version>1.7.0</version>
+				<scope>test</scope>
+			</dependency>
+			<dependency>
+				<groupId>org.powermock</groupId>
+				<artifactId>powermock-api-mockito</artifactId>
+				<version>1.7.0</version>
+				<scope>test</scope>
+			</dependency>
+		</dependencies>
+	</dependencyManagement>
+</project>

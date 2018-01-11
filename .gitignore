@@ -1,0 +1,17 @@
+# Eclipse / IntelliJ / Maven / backup editor files
+/target$
+target
+target$
+/target/
+/.settings/**
+.classpath
+.project
+*.swp
+*~
+*.iml
+.idea/
+*.iws
+*.eml
+out/
+*.hg
+*.hg*
