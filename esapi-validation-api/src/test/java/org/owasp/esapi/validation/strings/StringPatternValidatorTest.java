@@ -50,4 +50,6 @@ public class StringPatternValidatorTest {
 		Assert.assertEquals(ValidationStatus.FAIL, response.getResponseStatus());
 		Assert.assertTrue(response.getResponseDetail().contains("matched pattern"));
 	}
+	
+	
 }

@@ -3,11 +3,10 @@ package org.owasp.esapi.codecs.canonicalization.composed;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
-import org.mockito.Matchers;
 import org.mockito.Mockito;
 import org.owasp.esapi.codecs.Codec;
-import org.owasp.esapi.codecs.canonicalization.EncodingFailureHandler;
-import org.owasp.esapi.codecs.canonicalization.composed.MultipleEncodingTester;
+import org.owasp.esapi.validation.ValidationResponse.ValidationStatus;
+import org.owasp.esapi.validation.ValidationResponseWithResult;
 
 /**
  * FIXME:  Document intent of class.  General Function, purpose of creation, intended feature, etc.
@@ -18,12 +17,10 @@ import org.owasp.esapi.codecs.canonicalization.composed.MultipleEncodingTester;
  */
 public class MultipleEncodingTesterTest {
 
-    private EncodingFailureHandler mockFailHandler;
     private Codec mockCodec;
     
     @Before
     public void setup() {
-        mockFailHandler = Mockito.mock(EncodingFailureHandler.class);
         mockCodec = Mockito.mock(Codec.class);
     }
     
@@ -32,13 +29,11 @@ public class MultipleEncodingTesterTest {
         Mockito.when(mockCodec.decode("input")).thenReturn("reply");
         Mockito.when(mockCodec.decode("reply")).thenReturn("reply");
         
-        MultipleEncodingTester uit = new MultipleEncodingTester(mockCodec, mockFailHandler);
-        String result = uit.check("input");
-        Assert.assertEquals("reply", result);
-        
+        MultipleEncodingTester uit = new MultipleEncodingTester(mockCodec);
+        ValidationResponseWithResult<String> result = uit.validate("input");
+        Assert.assertEquals("reply", result.getResult());
         Mockito.verify(mockCodec, Mockito.times(1)).decode("input");
         Mockito.verify(mockCodec, Mockito.times(1)).decode("reply");
-        Mockito.verify(mockFailHandler, Mockito.times(0)).onFailure(Matchers.anyString());
     }
     
     @Test
@@ -46,13 +41,15 @@ public class MultipleEncodingTesterTest {
         Mockito.when(mockCodec.decode("input")).thenReturn("reply");
         Mockito.when(mockCodec.decode("reply")).thenReturn("multiViolation");
         
-        MultipleEncodingTester uit = new MultipleEncodingTester(mockCodec, mockFailHandler);
-        String result = uit.check("input");
-        Assert.assertEquals("input", result);
+        MultipleEncodingTester uit = new MultipleEncodingTester(mockCodec);
+        ValidationResponseWithResult<String> result = uit.validate("input");
+        Assert.assertEquals("input", result.getResult());
+        Assert.assertFalse(result.isValid());
+        Assert.assertEquals(ValidationStatus.FAIL, result.getResponseStatus());
+        Assert.assertTrue(result.getResponseDetail().toLowerCase().contains("multiple encoding detected"));
         
         Mockito.verify(mockCodec, Mockito.times(1)).decode("input");
         Mockito.verify(mockCodec, Mockito.times(1)).decode("reply");
-        Mockito.verify(mockFailHandler, Mockito.times(1)).onFailure(Matchers.anyString());
     }
     
 }

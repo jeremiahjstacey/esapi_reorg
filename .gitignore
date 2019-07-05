@@ -4,6 +4,7 @@ target
 target$
 /target/
 /.settings/**
+**/.settings/**/*
 .classpath
 .project
 *.swp

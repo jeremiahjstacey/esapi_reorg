@@ -3,11 +3,10 @@ package org.owasp.esapi.codecs.canonicalization.composed;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
-import org.mockito.Matchers;
 import org.mockito.Mockito;
 import org.owasp.esapi.codecs.Codec;
-import org.owasp.esapi.codecs.canonicalization.EncodingFailureHandler;
-import org.owasp.esapi.codecs.canonicalization.composed.MixedEncodingTester;
+import org.owasp.esapi.validation.ValidationResponse.ValidationStatus;
+import org.owasp.esapi.validation.ValidationResponseWithResult;
 
 /**
  * FIXME:  Document intent of class.  General Function, purpose of creation, intended feature, etc.
@@ -18,13 +17,11 @@ import org.owasp.esapi.codecs.canonicalization.composed.MixedEncodingTester;
  */
 public class MixedEncodingTesterTest {
 
-    private EncodingFailureHandler mockFailHandler;
     private Codec mockCodec1;
     private Codec mockCodec2;
     
     @Before
     public void setup() {
-        mockFailHandler = Mockito.mock(EncodingFailureHandler.class);
         mockCodec1 = Mockito.mock(Codec.class);
         mockCodec2 = Mockito.mock(Codec.class);
     }
@@ -34,13 +31,12 @@ public class MixedEncodingTesterTest {
         Mockito.when(mockCodec1.decode("input")).thenReturn("reply");
         Mockito.when(mockCodec2.decode("reply")).thenReturn("reply");
         
-        MixedEncodingTester uit = new MixedEncodingTester(mockCodec1, mockCodec2, mockFailHandler);
-        String result = uit.check("input");
-        Assert.assertEquals("reply", result);
+        MixedEncodingTester uit = new MixedEncodingTester(mockCodec1, mockCodec2);
+        ValidationResponseWithResult<String> result = uit.validate("input");
+        Assert.assertEquals("reply", result.getResult());
         
         Mockito.verify(mockCodec1, Mockito.times(1)).decode("input");
         Mockito.verify(mockCodec2, Mockito.times(1)).decode("reply");
-        Mockito.verify(mockFailHandler, Mockito.times(0)).onFailure(Matchers.anyString());
     }
     
     @Test
@@ -48,13 +44,15 @@ public class MixedEncodingTesterTest {
         Mockito.when(mockCodec1.decode("input")).thenReturn("reply");
         Mockito.when(mockCodec2.decode("reply")).thenReturn("mixedViolation");
         
-        MixedEncodingTester uit = new MixedEncodingTester(mockCodec1, mockCodec2, mockFailHandler);
-        String result = uit.check("input");
-        Assert.assertEquals("input", result);
+        MixedEncodingTester uit = new MixedEncodingTester(mockCodec1, mockCodec2);
+        ValidationResponseWithResult<String> result = uit.validate("input");
+        Assert.assertEquals("input", result.getResult());
+        Assert.assertFalse(result.isValid());
+        Assert.assertEquals(ValidationStatus.FAIL, result.getResponseStatus());
+        Assert.assertTrue(result.getResponseDetail().toLowerCase().contains("mixed encoding detected"));
         
         Mockito.verify(mockCodec1, Mockito.times(1)).decode("input");
         Mockito.verify(mockCodec2, Mockito.times(1)).decode("reply");
-        Mockito.verify(mockFailHandler, Mockito.times(1)).onFailure(Matchers.anyString());
     }
     
 
