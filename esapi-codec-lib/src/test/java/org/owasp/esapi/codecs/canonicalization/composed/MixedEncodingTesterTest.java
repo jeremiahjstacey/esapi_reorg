@@ -6,7 +6,7 @@ import org.junit.Test;
 import org.mockito.Mockito;
 import org.owasp.esapi.codecs.Codec;
 import org.owasp.esapi.validation.ValidationResponse.ValidationStatus;
-import org.owasp.esapi.validation.ValidationResponseWithResult;
+import org.owasp.esapi.validation.ValidationResult;
 
 /**
  * FIXME:  Document intent of class.  General Function, purpose of creation, intended feature, etc.
@@ -32,7 +32,7 @@ public class MixedEncodingTesterTest {
         Mockito.when(mockCodec2.decode("reply")).thenReturn("reply");
         
         MixedEncodingTester uit = new MixedEncodingTester(mockCodec1, mockCodec2);
-        ValidationResponseWithResult<String> result = uit.validate("input");
+        ValidationResult<String> result = uit.validate("input");
         Assert.assertEquals("reply", result.getResult());
         
         Mockito.verify(mockCodec1, Mockito.times(1)).decode("input");
@@ -45,7 +45,7 @@ public class MixedEncodingTesterTest {
         Mockito.when(mockCodec2.decode("reply")).thenReturn("mixedViolation");
         
         MixedEncodingTester uit = new MixedEncodingTester(mockCodec1, mockCodec2);
-        ValidationResponseWithResult<String> result = uit.validate("input");
+        ValidationResult<String> result = uit.validate("input");
         Assert.assertEquals("input", result.getResult());
         Assert.assertFalse(result.isValid());
         Assert.assertEquals(ValidationStatus.FAIL, result.getResponseStatus());

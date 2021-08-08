@@ -27,8 +27,8 @@ public final class ResultValidators {
 	public static <R> ResultValidator<R> and(final List<ResultValidator<R>> ResultValidators) {
 		return new ResultValidator<R>() {
 
-			public ValidationResponseWithResult<R> validate(R data) {
-			    ValidationResponseWithResult<R> response = ValidationResponseWithResult.OK;
+			public ValidationResult<R> validate(R data) {
+			    ValidationResult<R> response = ValidationResult.OK;
 				for (ResultValidator<R> ResultValidator : ResultValidators) {
 					response = ResultValidator.validate(data);
 					if (!response.isValid()) {
@@ -42,9 +42,9 @@ public final class ResultValidators {
 
 	public static <R> ResultValidator<R> or(final List<ResultValidator<R>> ResultValidators) {
 		return new ResultValidator<R>() {
-			public ValidationResponseWithResult<R> validate(R data) {
+			public ValidationResult<R> validate(R data) {
 				StringBuilder msgBuffer = new StringBuilder();
-				ValidationResponseWithResult<R> response = ValidationResponseWithResult.OK;
+				ValidationResult<R> response = ValidationResult.OK;
 				for (ResultValidator<R> ResultValidator : ResultValidators) {
 					response = ResultValidator.validate(data);
 					if (response.isValid()) {
@@ -57,7 +57,7 @@ public final class ResultValidators {
 				}
 
 				if (!response.isValid()) {
-					response = new ValidationResponseWithResult(ValidationStatus.FAIL, msgBuffer.toString());
+					response = new ValidationResult(ValidationStatus.FAIL, msgBuffer.toString());
 				}
 
 				return response;

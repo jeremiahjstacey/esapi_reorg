@@ -6,7 +6,7 @@ import org.junit.Test;
 import org.mockito.Mockito;
 import org.owasp.esapi.codecs.Codec;
 import org.owasp.esapi.validation.ValidationResponse.ValidationStatus;
-import org.owasp.esapi.validation.ValidationResponseWithResult;
+import org.owasp.esapi.validation.ValidationResult;
 
 /**
  * FIXME:  Document intent of class.  General Function, purpose of creation, intended feature, etc.
@@ -30,7 +30,7 @@ public class MultipleEncodingTesterTest {
         Mockito.when(mockCodec.decode("reply")).thenReturn("reply");
         
         MultipleEncodingTester uit = new MultipleEncodingTester(mockCodec);
-        ValidationResponseWithResult<String> result = uit.validate("input");
+        ValidationResult<String> result = uit.validate("input");
         Assert.assertEquals("reply", result.getResult());
         Mockito.verify(mockCodec, Mockito.times(1)).decode("input");
         Mockito.verify(mockCodec, Mockito.times(1)).decode("reply");
@@ -42,7 +42,7 @@ public class MultipleEncodingTesterTest {
         Mockito.when(mockCodec.decode("reply")).thenReturn("multiViolation");
         
         MultipleEncodingTester uit = new MultipleEncodingTester(mockCodec);
-        ValidationResponseWithResult<String> result = uit.validate("input");
+        ValidationResult<String> result = uit.validate("input");
         Assert.assertEquals("input", result.getResult());
         Assert.assertFalse(result.isValid());
         Assert.assertEquals(ValidationStatus.FAIL, result.getResponseStatus());

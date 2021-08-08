@@ -7,6 +7,6 @@ public interface ResultValidator <T> {
 	 * @param data Reference to validate.
 	 * @return {@link ValidationResponse} defining the result of the process.
 	 */
-    ValidationResponseWithResult<T> validate(T data);
+    ValidationResult<T> validate(T data);
 
 }

@@ -3,7 +3,7 @@ package org.owasp.esapi.codecs.canonicalization.composed;
 import org.owasp.esapi.codecs.Codec;
 import org.owasp.esapi.validation.ResultValidator;
 import org.owasp.esapi.validation.ValidationResponse.ValidationStatus;
-import org.owasp.esapi.validation.ValidationResponseWithResult;
+import org.owasp.esapi.validation.ValidationResult;
 
 /**
  * FIXME:  Document intent of class.  General Function, purpose of creation, intended feature, etc.
@@ -26,16 +26,16 @@ public class MixedEncodingTester implements ResultValidator<String> {
     }
     
     @Override
-    public ValidationResponseWithResult<String> validate(String data) {
+    public ValidationResult<String> validate(String data) {
         String rval = codec1.decode(data);
-        ValidationResponseWithResult<String> response = new ValidationResponseWithResult<>(ValidationStatus.PASS, data, rval);
+        ValidationResult<String> response = new ValidationResult<>(ValidationStatus.PASS, data, rval);
         
         if (!rval.equals(data)) {
             String decode1 = rval;
             String decode2 = codec2.decode(decode1);
             if (!decode2.equals(decode1)) {
                 String message = String.format("Mixed Encoding Detected: %s -> %s decodes to %s :: %s -> %s decodes to  %s", data, codec1.getClass().getSimpleName(),decode1,codec2.getClass().getSimpleName(),decode1, decode2);
-                response = new ValidationResponseWithResult<>(ValidationStatus.FAIL, message, data);
+                response = new ValidationResult<>(ValidationStatus.FAIL, message, data);
             }
         }
         return response;

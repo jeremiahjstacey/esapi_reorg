@@ -1,9 +1,9 @@
 package org.owasp.esapi.codecs.canonicalization;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -13,13 +13,10 @@ import org.owasp.esapi.ESAPI;
 import org.owasp.esapi.LogFactory;
 import org.owasp.esapi.Logger;
 import org.owasp.esapi.codecs.Codec;
-import org.owasp.esapi.codecs.canonicalization.composed.MixedEncodingTester;
-import org.owasp.esapi.codecs.canonicalization.composed.MultipleEncodingTester;
 import org.owasp.esapi.validation.ResultValidator;
 import org.powermock.api.mockito.PowerMockito;
 import org.powermock.core.classloader.annotations.PrepareForTest;
 import org.powermock.modules.junit4.PowerMockRunner;
-import org.powermock.reflect.Whitebox;
 
 /**
  * FIXME:  Document intent of class.  General Function, purpose of creation, intended feature, etc.
@@ -51,6 +48,13 @@ public class CanonicalizationBuilderTest {
         CanonicalizationBuilder builder = new CanonicalizationBuilder();
         builder.setDelegateCodecs(Arrays.asList(codec, codec2));
         ResultValidator<String> target = builder.build();
+        
+        List<String> values = new ArrayList<>();
+        values.add("one");
+        values.add("two");
+        values.add("three");
+        
+        System.out.println(values.toString());
         
       /*  ComposedCanonicalizer ucan = (ComposedCanonicalizer) target;
         List<EncodingTester> testers = (List<EncodingTester>) Whitebox.getInternalState(ucan, "testers");
